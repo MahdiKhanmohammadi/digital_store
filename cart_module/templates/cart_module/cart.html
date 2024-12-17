@@ -1,0 +1,205 @@
+{% extends '_layout.html' %}
+
+
+
+{% block page_title %}
+سبد خرید
+{% endblock page_title %}
+
+
+{% block container %}
+
+{% if request.user.is_authenticated %}
+
+
+
+
+{% if items %}
+
+
+
+
+<section class="h-100">
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-10">
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="fw-normal mb-0">سبد خرید</h3>
+                </div>
+
+
+
+
+                {% for item in items %}
+
+                <div class="card rounded-3 mb-4">
+                    <div class="card-body p-4">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="col-md-2 col-lg-2 col-xl-2">
+                                <img src="{{item.product.image.url}}" class="img-fluid rounded-3" alt="Cotton T-shirt">
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                <p class="lead fw-normal mb-2">{{item.product.title}}</p>
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2"
+                                    onclick="stepDown({{item.product.pk}})">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+
+                                <input id="form1_{{item.product.pk}}" min="0" name="quantity" value="{{item.quantity}}"
+                                    class="form-control form-control-sm" />
+
+                                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-link px-2"
+                                    onclick="stepUp({{item.product.pk}})">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                <h5 id="price_{{item.product.pk}}" class="mb-0">{{item.price}}</h5>
+                            </div>
+                            <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                <a onclick="delete_item({{item.product.pk}})" class="text-danger"><i
+                                        class="fa fa-trash fa-lg"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% endfor %}
+
+                <div class="card">
+                    <p id="total_price">جمع کل :{{cart.total_price}}</p>
+                </div>
+
+
+
+
+                <div class="card mb-4">
+                    <p id="message"></p>
+                    <div class="card-body p-4 d-flex flex-row">
+                        <div data-mdb-input-init class="form-outline flex-fill">
+                            <input type="text" id="form1" class="form-control form-control-lg" />
+                            <label class="form-label" for="form1">کد تخفیف</label>
+                        </div>
+                        <button onclick="discount({{cart.pk}})" type="button" data-mdb-button-init data-mdb-ripple-init
+                            class="btn btn-outline-warning btn-lg ms-3">اعمال</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <button type="button" data-mdb-button-init data-mdb-ripple-init
+                            class="btn btn-warning btn-block btn-lg">خرید</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% else %}
+
+<p class="alert alert-danger text-center">محصولی در سبد خرید وجود ندارد</p>
+
+{% endif %}
+{% endif %}
+{% endblock container %}
+
+
+{% block scripts %}
+<script>
+    function stepUp(pk) {
+        const ajax_url = "{% url 'add_to_cart' %}"
+        $.ajax(
+            {
+                type: "GET",
+                url: ajax_url,
+                data: {
+                    pk: pk
+                },
+                success: function (data) {
+                    document.getElementById('form1_' + pk).value = data.quantity;
+                    document.getElementById('price_' + pk).innerHTML = data.price;
+                    document.getElementById("total_price").innerHTML = data.total_price;
+
+                }
+            })
+    };
+</script>
+
+<script>
+    function stepDown(pk) {
+        const ajax_url = "{% url 'remove_item' %}"
+        $.ajax(
+            {
+                type: "GET",
+                url: ajax_url,
+                data: {
+                    pk: pk
+                },
+                success: function (data) {
+                    if (data == "remove") {
+                        location.reload()
+                    }
+                    else {
+                        document.getElementById('form1_' + pk).value = data.quantity;
+                        document.getElementById('price_' + pk).innerHTML = data.price;
+                        document.getElementById("total_price").innerHTML = data.total_price;
+
+                    }
+                }
+            })
+    };
+</script>
+
+<script>
+    function delete_item(pk) {
+        const ajax_url = "{% url 'complete_remove' %}"
+        $.ajax(
+            {
+                type: "GET",
+                url: ajax_url,
+                data: {
+                    pk: pk
+                },
+                success: function (data) {
+                    location.reload()
+
+                }
+            })
+    }
+</script>
+
+<script>
+    function discount(pk) {
+        const ajax_url = "{% url 'discount_code' %}";
+        var message = document.getElementById('message');
+        var code = document.getElementById('form1').value;
+        $.ajax(
+            {
+                type: "GET",
+                url: ajax_url,
+                data: {
+                    pk: pk,
+                    code :code
+                },
+                success: function (data) {
+                    if (data.status == 200) {
+                        message.className = "alert alert-success";
+                        message.innerHTML = data.message;
+                        document.getElementById("total_price").innerHTML = data.price;
+
+                    }
+                    else if (data.status == 404) {
+                        message.className = "alert alert-danger";
+                        message.innerHTML = data.message;
+                    }
+                }
+            })
+    }
+</script>
+
+{% endblock scripts %}

@@ -1,0 +1,24 @@
+<div class="container">
+   <div class="row">
+
+      {% for blog in blogs %}
+      <div class="col-md-4">
+         <div class="blog-content">
+            <figure>
+               <img src="{{blog.image.url}}" class="w-100">
+            </figure>
+            <h5><i class="fa fa-title"></i>{{blog.title}}</h5>
+            <p>{{blog.short_description}}</p>
+            <ul>
+               <li><i class="fa fa-bars"></i>دسته بندی : {{blog.category.title}}</li>
+               <li><i class="fa fa-calendar-o"></i>نوشته شده در : {{blog.jalali_created_at}}</li>
+               <li><i class="fa fa-user-o"></i>نویسنده : {{blog.author}}</li>
+            </ul>
+            <a href="{% url 'blog_detail' blog.pk %}" class="mybtn"><i class="fa fa-continuous"></i>ادامه مطلب&raquo;</a>
+         </div>
+      </div>
+      {% endfor %}
+
+
+   </div>
+</div>

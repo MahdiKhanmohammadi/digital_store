@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="{% static 'style/bootstrap.css' %}" rel="stylesheet" type="text/css">
+  <title>ثبت نام</title>
+  <style>
+    .errorlist {
+      color: red;
+    }
+
+    li {
+      list-style: none;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="vh-100" style="background-color: #508bfc;">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card shadow-2-strong" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+
+              <h3 class="mb-5">ثبت نام</h3>
+
+              <form method="post">
+                {% csrf_token %}
+
+                {% for field in form %}
+
+                <div data-mdb-input-init class="form-outline mb-4">
+                  {{field.errors}}
+                  {{field}}
+                  <label class="form-label" for="typeEmailX-2">{{field.label}}</label>
+                </div>
+
+                {% endfor %}
+
+
+
+
+
+                <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg btn-block"
+                  type="submit">ثبت نام</button>
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>

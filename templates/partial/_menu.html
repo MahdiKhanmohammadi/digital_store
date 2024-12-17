@@ -1,0 +1,37 @@
+<div class="main-menu">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul>
+                    {% for category in categories %}
+                    
+                    {% if category.parent == None %}
+                    <li>
+                        <a href="{% url 'category_products' category.slug %}">{{category.title}}</a>
+                        <ul>
+
+                            {% if category.sub_categoires.all %}
+
+
+                            {% for sub_category in category.sub_categoires.all %}
+
+                            <li><a href="{% url 'category_products' sub_category.slug %}">{{sub_category.title}}</a></li>
+
+
+                            {% endfor %}
+
+
+                            {% endif %}
+
+
+                        </ul>
+                    </li>
+                    {% endif %}
+
+                    {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>

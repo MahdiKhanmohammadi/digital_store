@@ -1,0 +1,47 @@
+{% extends '_layout.html' %}
+{% load static %}
+
+
+{% block page_title %}
+  خانه
+{% endblock page_title %}
+  
+
+{% block container %}
+<!-- pin top -->
+{% include 'home_module/includes/index/pin_top_product.html' %}
+<!-- -------------------------------------------------------------- -->
+<!-- 50% off first time - Big opportunity -->
+{% include 'home_module/includes/index/big_opportunity.html' %}
+<!---------------------------------->
+<!-- category - product -ad -->
+{% include 'home_module/includes/index/category_product.html' %}
+<!-- ----------------------------- -->
+<!-- most view -->
+{% include 'home_module/includes/index/most_view_product.html' %}
+<!---------------------------------->
+<!-- blogs -->
+{% include 'home_module/includes/index/blog.html' %}
+<!---------------------------------->
+<!-- categories -->
+{% include 'home_module/includes/index/footer_categories.html' %}
+<!---------------------------------->
+{% endblock container %}
+
+{% block scripts %}
+
+<script>
+  $(document).ready(function(){
+    $('.owl-carousel').owlCarousel({
+      loop: true,
+      margin: 10,
+      nav: true,
+      items: 1
+    });
+  });
+</script>
+{% include 'home_module/includes/index/counter.html' %}
+
+
+  
+{% endblock scripts %}

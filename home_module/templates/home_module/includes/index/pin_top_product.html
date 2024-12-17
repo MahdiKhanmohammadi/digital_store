@@ -1,0 +1,39 @@
+<!-- pin top -->
+ 
+ {% if pinned_products %}
+   
+   
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="slider-box">
+            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+               <ol class="carousel-indicators">
+                  <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                  <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+               </ol>
+               <div class="carousel-inner">
+
+                  {% for product in pinned_products %}
+                  <div class="carousel-item {% if forloop.first %} active {% endif %}">
+                     <div class="col-md-6" style="padding-top: 20px;">
+                        <h4>{{product.title}}</h4>
+                        <!-- <span>دوربین کانن سری 6</span> -->
+                        <p>{{product.short_description}}</p>
+                     </div>
+                     <div class="col-md-6">
+                        <img src="{{product.image.url}}" class="w-75">
+                     </div>
+                  </div>
+                  {% endfor %}
+
+               </div>
+
+            </div>
+         </div>
+         <!--slider-box-->
+      </div>
+   </div>
+</div>
+<!---------------------------------->
+{% endif %}

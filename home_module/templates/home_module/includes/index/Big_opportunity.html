@@ -1,0 +1,47 @@
+{% load static %}
+<div class="container">
+   <div class="row">
+      <!-- ads -->
+      <div class="col-md-3">
+         <div class="coopen">
+            <img src="{% static 'img/coopen.png' %}" class="w-100" alt="">
+         </div>
+      </div>
+      <!-- ---------------------------- -->
+      <!-- offer -->
+
+      {% if offer %}
+      <div class="col-md-9">
+         <div class="vizheh">
+            <div class="col-md-6">
+               <div class="vizheh-img">
+                  <a href="{% url 'product_detail' offer.slug %}">
+                  <img src="{{offer.image.url}}" alt="" srcset="">
+               </a>
+               </div>
+            </div>
+            <div class="col-md-6">
+               <div class="vizheh-content">
+                  <div><del class="formatted-price">{{ offer.format_price }} تومان</del></div>
+                  <h4 class="formatted-price">{{ offer.format_discount_price }} تومان</h4>
+                  <h3>{{offer.title}}</h3>
+                  <ul>
+
+                     {% for attribute in offer.attributes.all %}
+                     <li>{{attribute.key}} {{attribute.value}}</li>
+                     {% endfor %}
+
+                  </ul>
+                  <hr>
+                  <span>زمان باقیمانده تا پایان سفارش</span>
+                  <p id="countdown"></p>
+               </div>
+            </div>
+            <div class="vizheh-tag">
+               <span>فرصت ویژه</span>
+            </div>
+         </div>
+      </div>
+      {% endif %}
+   </div>
+</div>

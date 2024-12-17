@@ -1,0 +1,32 @@
+{% if most_view_product %}
+
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="three-slider">
+            <h4>محصولات پر بازدید</h4>
+            <div class="owl-carousel owl-theme ov3">
+
+               {% for product in most_view_product %}
+               <div class="item">
+                  <figure>
+                     <a href="{% url 'product_detail' product.slug %}"><img src="{{product.image.url}}" class="w-100" /></a>
+                  </figure>
+                  <h5>{{product.title}}</h5>
+                  {% if product.discount %}
+                  <div><del class="formatted-price">{{ product.format_price }} تومان</del></div>
+
+                  <span>{{ product.format_discount_price}} تومان</span>
+                  {% else %}
+                  <span>{{product.format_price}} تومان</span>
+                  {% endif %}
+               </div>
+               {% endfor %}
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+{% endif %}

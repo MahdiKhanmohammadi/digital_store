@@ -1,0 +1,46 @@
+{% for category in categories %}
+
+{% if category.products.count > 0 %}
+
+   
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="one-slider">
+            <h4>{{category.title}}</h4>
+            <div class="owl-carousel owl-theme ov{{ forloop.counter }}">
+               {% for product in category.products.all %}
+
+               <div class="item">
+                  <figure>
+                     <a href="{% url 'product_detail' product.slug %}"><img src="{{product.image.url}}" class="w-100" /></a>
+                  </figure>
+                  <h5>{{product.title}}</h5>
+
+                  {% if product.discount %}
+                  <div><del class="formatted-price">{{ product.format_price }} تومان</del></div>
+
+                  <span>{{ product.format_discount_price}} تومان</span>
+                  {% else %}
+                  <span>{{product.format_price}} تومان</span>
+                  {% endif %}
+               </div>
+               {% endfor %}
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!---------------------------------->
+<!-- ads -->
+
+
+{% if category.ad %}
+{% include 'home_module/includes/index/ad.html' %}
+{% endif %}
+
+
+
+{% endif %}
+
+{% endfor %}

@@ -1,0 +1,274 @@
+{% extends '_layout.html' %}
+
+{% load custom_tags %}
+{% load thumbnail %}
+
+{% block page_title %}
+{{product.title}}
+{% endblock page_title %}
+
+
+{% block container %}
+
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="single-box">
+            <div class="row">
+               <div class="col-md-7">
+                  <h5>{{product.title}}</h5>
+                  <h6>دسته بندی : {{category.title}}</h6>
+                  <hr>
+                  <span>توضیحات محصول :</span>
+                  <br>
+                  <div class="row">
+                     <p>
+                        {{product.description}}
+                     </p>
+                  </div>
+                  <hr>
+
+                  {% if product.discount %}
+                  <del>{{product.format_price}} تومان</del>
+                  <h3>{{product.format_discount_price}} تومان</h3>
+                  {% else %}
+                  <h3>{{product.format_price}} تومان</h3>
+                  {% endif %}
+
+
+                  <div class="btn-single">
+                     <a onclick="add_to_cart({{product.pk}})"><i class="fa fa-cart-plus"></i>افزودن به سبد خرید</a>
+                  </div>
+               </div>
+               <div class="col-md-5">
+                  <div class="single-img">
+                     <figure>
+                        <img src="{{product.image.url}}" class="w-100 s-img" data-zoom-image="img/single-tablet.jpg">
+                     </figure>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!---------------------------------->
+<div class="container">
+   <span class="releated-products">محصولات مرتبط</span>
+   <hr>
+   <div class="row">
+      <div class="col-md-12">
+         <div class="single-two-slider">
+            <div class="owl-carousel owl-theme ov-single-two">
+               {% if similar_products %}
+
+
+               {% for product in similar_products %}
+
+               <div class="item">
+                  <figure>
+                     <a href="{% url 'product_detail' product.slug %}"><img src="{{product.image.url}}" class="w-100" /></a>
+                  </figure>
+                  <h5>{{product.title}}</h5>
+
+                  {% if product.discount %}
+                  <span><del>{{product.format_price}} تومان</del></span>
+                  <span>{{product.format_discount_price}} تومان</span>
+                  {% else %}
+                  <span>{{product.format_price}} تومان</span>
+                  {% endif %}
+
+
+               </div>
+
+               {% endfor %}
+
+
+               {% endif %}
+
+
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!---------------------------------->
+<div class="container">
+   <div class="row">
+      <div class="col-md-12">
+         <div class="single-tabs">
+            <ul class="nav nav-tabs">
+               <li class="active"><a data-toggle="tab" href="#one"><i class="fa fa-file"></i>مشخصات فنی</a></li>
+               <li><a data-toggle="tab" href="#two"><i class="fa fa-pencil"></i>نظرات کاربران -
+                     {{comments.count}}</a></li>
+            </ul>
+            <div class="tab-content">
+               <div id="one" class="tab-pane fade">
+
+                  {% for attribute in attributes %}
+                  <p class="bg-light"><span>{{attribute.key}} :</span>{{attribute.value}}</p>
+                  {% endfor %}
+
+
+               </div>
+               <div id="two" class="tab-pane fade">
+
+                  {% if comments %}
+
+                  {% for comment in comments %}
+
+                  {% if comments.parent == None %}
+
+                  <div class="card w-75 text-right">
+                     <div class="card-body">
+                        <h5 class="card-title">
+
+                           {% if user.get_username == comment.author.username %}
+                           <h5>نظر شما</h5>
+                           {% else %}
+                           <h5>{{comment.author.username}}</h5>
+                           {% endif %}
+
+
+                           <p class="card-text">{{comment.body}}</p>
+                           {% if user.is_staff %}
+                           <div class="row mr-3">
+                              <div class="col-md-12">
+                                 <a onclick="replay({{comment.pk}})" class="btn btn-primary text-left">پاسخ</a>
+                                 <a href="{% url 'admin:product_module_comment_change' comment.pk %}"
+                                    class="btn btn-warning text-left">ویرایش</a>
+                                 <a href="{% url 'admin:product_module_comment_delete' comment.pk %}"
+                                    class="btn btn-danger text-left">حذف</a>
+                              </div>
+                           </div>
+                           {% endif %}
+                     </div>
+                  </div>
+                  <br>
+
+                  {% if comment.child.visibel == True %}
+                  <div class="card w-75 text-right mr-5">
+                     <div class="card-body">
+
+                        {% if user.get_username == comment.author.username %}
+                        <h5>نظر شما</h5>
+                        {% else %}
+                        <h5>{{comment.child.author.username}}</h5>
+                        {% endif %}
+                        <p class="card-text">{{comment.child.body}}</p>
+                        {% if user.is_staff %}
+                        <div class="row mr-3">
+                           <div class="col-md-12">
+                              <!-- <a onclick="replay({{comment.child.pk}})" href="#" class="btn btn-primary text-left">پاسخ</a> -->
+                              <a href="{% url 'admin:product_module_comment_change' comment.child.pk %}"
+                                 class="btn btn-warning text-left">ویرایش</a>
+                              <a href="{% url 'admin:product_module_comment_delete' comment.child.pk %}"
+                                 class="btn btn-danger text-left">حذف</a>
+                           </div>
+                        </div>
+                        {% endif %}
+                     </div>
+                  </div>
+
+                  <br>
+                  {% endif %}
+
+                  {% endif %}
+
+
+                  {% endfor %}
+
+                  {% else %}
+                  نظری وجود ندارد...
+                  {% endif %}
+
+                  {% if user.is_authenticated %}
+
+
+                  <hr>
+                  <form action="{% url 'add_comment' %}" method="post">
+                     {% csrf_token %}
+
+
+                     <input type="hidden" name="product_id" value="{{product.pk}}">
+
+                     <input type="hidden" id="parent_id" name="parent_id">
+
+
+                     <div class="mb-3 mt-5">
+                        <p id="replay"></p>
+                        <label class="form-label">کامنت</label>
+
+
+                        {{form}}
+
+                     </div>
+                     <button class="btn btn-success" type="submit">ثبت</button>
+                  </form>
+                  {% else %}
+                  برای کامنت گذاشتن وارد شوید
+                  {% endif %}
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+{% endblock container %}
+
+{% block scripts %}
+
+<script>
+   function add_to_cart(pk) {
+      const ajax_url = "{% url 'add_to_cart' %}"
+      $.ajax(
+         {
+            type: "GET",
+            url: ajax_url,
+            data: {
+               pk: pk
+            },
+            success: function (data) {
+               Swal.fire({
+                  position: "top-center",
+                  icon: "success",
+                  title: data,
+                  showConfirmButton: false,
+                  timer: 1500
+               });
+            }
+         })
+   }
+</script>
+
+<script>
+
+   function replay(parent_id) {
+      
+
+      document.getElementById('parent_id').value = parent_id;
+
+      $.ajax(
+         {
+            type: "GET",
+            url: "/get_author_comment",
+            data: {
+               parent_comment_id: parent_id
+            },
+            success: function (data) {
+               $('#replay').text(data);
+            }
+         })
+
+      element = document.getElementById('replay');
+      element.scrollIntoView({ behavior: 'smooth' })
+   }
+
+</script>
+
+
+{% endblock scripts %}
+
+{% load sweetify %}
+{% sweetify %}

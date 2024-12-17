@@ -1,0 +1,73 @@
+{% extends '_layout.html' %}
+{% load thumbnail %}
+
+{% block container %}
+<!-- <div class="pages-bnaer text-center">
+   <div class="container">
+      <span>{{category}}</span>
+   </div>
+</div> -->
+<div class="container">
+   <div class="row">
+
+      {% if page_obj.paginator.count > 0 %}
+
+      {% for product in page_obj %}
+      <div class="col-md-4">
+         <div class="blog-content">
+            <figure>
+               {% thumbnail product.image "100x100" quality=90 crop="center" as im %}
+               <img src="{{im.url}}" class="w-100">
+               {% endthumbnail %}
+
+            </figure>
+            <h5><i class="fa fa-title"></i>{{product.title}}</h5>
+            <p>{{product.short_description}} ...</p>
+            <ul>
+               <li><i class="fa fa-bars"></i>دسته بندی : {{category}}</li>
+               <!-- <li><i class="fa fa-calendar-o"></i>نوشته شده در : 97/10/20</li>
+               <li><i class="fa fa-user-o"></i>نویسنده : سئو 90</li> -->
+            </ul>
+            <a href="#" class="mybtn"><i class="fa fa-continuous"></i>ادامه مطلب&raquo;</a>
+         </div>
+      </div>
+      {% endfor %}
+
+
+
+      {% else %}
+      <div class="d-flex justify-content-center  align-items-center">
+         <p class="text-center h3">محصولی برای نمایش وجود ندارد !</p>
+      </div>
+      {% endif %}
+
+
+
+
+   </div>
+   <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+         {% if page_obj.has_previous %}
+         <li class="page-item ">
+            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+         </li>
+         {% endif %}
+
+         {% for page in page_obj.paginator.page_range %}
+         <li class="page-item 
+        {% if page_obj.number == page %} active {% endif %}">
+            <a class="page-link" href="?page={{page}}">{{page}}</a>
+         </li>
+         {% endfor %}
+
+
+
+         {% if page_obj.has_next %}
+         <li class="page-item">
+            <a class="page-link" href=" ?page={{ page_obj.next_page_number }}">next</a>
+         </li>
+         {% endif %}
+      </ul>
+   </nav>
+</div>
+{% endblock container %}

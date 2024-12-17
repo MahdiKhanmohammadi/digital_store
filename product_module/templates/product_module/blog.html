@@ -1,0 +1,42 @@
+{% extends '_layout.html' %}
+{% load thumbnail %}
+
+
+{% block page_title %}
+    {{blog.title}}
+{% endblock page_title %}
+    
+
+{% block container %}
+<div class="container">
+    <div class="row">
+       <div class="col-md-12">
+          <div class="single-box">
+             <div class="row">
+                <div class="col-md-7">
+                   <h5>{{blog.title}}</h5>
+                   <h6>دسته بندی : {{blog.category.title}}</h6>
+                   <hr>
+                   <span>توضیحات محصول :</span>
+                   <br>
+                   <div class="row">
+                      <p>
+                         {{blog.description}}
+                      </p>
+                   </div>
+                   <hr>
+
+                </div>
+                <div class="col-md-5">
+                   <div class="single-img">
+                      <figure>
+                         <img src="{{blog.image.url}}" class="w-100 s-img" data-zoom-image="img/single-tablet.jpg">
+                      </figure>
+                   </div>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+{% endblock container %}
