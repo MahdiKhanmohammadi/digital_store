@@ -2,7 +2,7 @@
    <ul class="nav nav-tabs">
 
       {% for category in categories %}
-      <li class="active"><a data-toggle="tab" href="#watch"><i class="fa fa-gift"></i>{{category.title}}</a></li>
+      <li class="active"><a data-toggle="tab" href="{% url 'category_products' category.slug %}"><i class="fa fa-gift"></i>{{category.title}}</a></li>
 
       {% endfor %}
 
