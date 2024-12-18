@@ -222,6 +222,7 @@
 <script>
    function add_to_cart(pk) {
       const ajax_url = "{% url 'add_to_cart' %}"
+      const redirect = "{% url 'login' %}"
       $.ajax(
          {
             type: "GET",
@@ -230,6 +231,9 @@
                pk: pk
             },
             success: function (data) {
+               if(data == '404'){
+                  window.location.replace(redirect)
+               }else{
                Swal.fire({
                   position: "top-center",
                   icon: "success",
@@ -237,7 +241,7 @@
                   showConfirmButton: false,
                   timer: 1500
                });
-            }
+            }}
          })
    }
 </script>
