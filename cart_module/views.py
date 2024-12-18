@@ -28,6 +28,16 @@ def show_cart(request: HttpRequest):
                 'cart': get_user_cart
             }
             return render(request, "cart_module/cart.html", context)
+        else:
+            new_cart = Cart(user = user)
+            new_cart.save()
+            context = {
+                'item_count': 0,
+                'items': None,
+                'cart': new_cart
+            }
+            return render(request, "cart_module/cart.html", context)
+
     else:
         return HttpResponseNotFound()
 
