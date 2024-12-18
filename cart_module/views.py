@@ -87,7 +87,7 @@ def add_product_to_cart(request: HttpRequest):
 
         return HttpResponse("محصول با موفقیت افزوده شده.")
     else:
-        return redirect(reverse('login'))
+        return HttpResponse('404')
 
 
 def remove_product_in_cart(request):
