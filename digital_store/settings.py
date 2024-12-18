@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'jalali_date',
     'django_jalali',
     'sorl.thumbnail',
+    'sweetify',
     # app
     'account_module',
     'product_module',
