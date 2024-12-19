@@ -117,7 +117,7 @@
 
                   {% for comment in comments %}
 
-                  {% if comments.parent == None %}
+                  {% if comment.parent == None %}
 
                   <div class="card w-75 text-right">
                      <div class="card-body">
@@ -145,7 +145,11 @@
                      </div>
                   </div>
                   <br>
-
+                  
+                  {% if comment.child %}
+                     
+                  
+                     
                   {% if comment.child.visibel == True %}
                   <div class="card w-75 text-right mr-5">
                      <div class="card-body">
@@ -159,7 +163,6 @@
                         {% if user.is_staff %}
                         <div class="row mr-3">
                            <div class="col-md-12">
-                              <!-- <a onclick="replay({{comment.child.pk}})" href="#" class="btn btn-primary text-left">پاسخ</a> -->
                               <a href="{% url 'admin:product_module_comment_change' comment.child.pk %}"
                                  class="btn btn-warning text-left">ویرایش</a>
                               <a href="{% url 'admin:product_module_comment_delete' comment.child.pk %}"
@@ -172,7 +175,7 @@
 
                   <br>
                   {% endif %}
-
+                  {% endif %}
                   {% endif %}
 
 
@@ -273,6 +276,3 @@
 
 
 {% endblock scripts %}
-
-{% load sweetify %}
-{% sweetify %}
