@@ -75,9 +75,9 @@ def product_detail(request, slug):
 
     comments = product.comments.filter(visibel=True)
 
-    similar_products = category.products.all()
+    similar_products = category.products.all().exclude(pk=product.pk)
     if similar_products == None:
-        similar_products = category.parent.products.all()
+        similar_products = category.parent.products.all().exclude(pk=product.pk)
 
 
     context = {
@@ -91,6 +91,7 @@ def product_detail(request, slug):
     }
 
     return render(request, 'product_module/product.html', context)
+
 
 def blog_detail(request,pk):
     if pk:
