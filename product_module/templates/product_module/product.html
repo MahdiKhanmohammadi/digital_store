@@ -134,7 +134,9 @@
                            {% if user.is_staff %}
                            <div class="row mr-3">
                               <div class="col-md-12">
+                                 {% if comment.child == None %}
                                  <a onclick="replay({{comment.pk}})" class="btn btn-primary text-left">پاسخ</a>
+                                 {% endif %}
                                  <a href="{% url 'admin:product_module_comment_change' comment.pk %}"
                                     class="btn btn-warning text-left">ویرایش</a>
                                  <a href="{% url 'admin:product_module_comment_delete' comment.pk %}"
