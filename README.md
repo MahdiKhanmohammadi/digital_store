@@ -1,6 +1,6 @@
 # django-digital-store
 
-Hello friends iam mahdi khanmohammadi 
+ 
 
 [go to website](https://mahdikhan517.pythonanywhere.com/)
 
