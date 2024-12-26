@@ -2,9 +2,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseNotFound
 from product_module.models import Product, Discount
 from .models import Cart, CartItem
-import sweetify
 from django.urls import reverse
-import json
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from utils.emailService import send_email
 
 # Create your views here.
 
@@ -195,3 +196,17 @@ def discount_code(request: HttpRequest):
             return JsonResponse(data)
     else:
         return HttpResponseNotFound()
+    def change_state(request:HttpRequest):
+        if request.user.is_authenticated and request.method == "POST":
+            pk = request.POST.get('cart_id')
+            cart = get_object_or_404(Cart,pk = pk)
+            cart.state = 1 
+            cart.save()
+            return redirect('home')
+        else:
+            return HttpResponseNotFound()
+
+@receiver(post_save,sender = Cart)
+def checkout(sender,instance,**kwargs):
+    if instance.state == 1:
+        send_email('email/checkout.html',instance.user.email,{"tracking_code" :instance.tracking_code},"تسویه سبد خرید")
