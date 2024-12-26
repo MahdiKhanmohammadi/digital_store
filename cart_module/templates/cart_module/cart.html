@@ -88,12 +88,16 @@
                     </div>
                 </div>
 
+                 <form action="{% url 'change_state' %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="cart_id" value="{{cart.pk}}">
                 <div class="card">
                     <div class="card-body">
-                        <button type="button" data-mdb-button-init data-mdb-ripple-init
+                        <button type="submit" data-mdb-button-init data-mdb-ripple-init
                             class="btn btn-warning btn-block btn-lg">خرید</button>
                     </div>
                 </div>
+                </form>
 
             </div>
         </div>
